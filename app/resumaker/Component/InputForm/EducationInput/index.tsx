@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Input } from "../../../../components/Input";
 import { Education } from "../../../../type/resume.type";
-import DateRangePicker from "../../../../components/DuelDatePicker";
-
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 type EducationInputProps = {
   education: Education[];
   onChange: (education: Education[]) => void;
@@ -13,8 +14,16 @@ const EducationInput: React.FC<EducationInputProps> = ({
   onChange,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
+  const handleSelect=(date:any)=>{
+    console.log(date); 
+  }
+  const selectionRange = {
+      startDate: new Date('02-11-2024'),
+      endDate: new Date('02-11-2025'),
+      key: 'selection',
+    }
   const handleAddEducation = () => {
+     
     const newEducation: Education = {
       institution: "",
       degree: "",
@@ -325,29 +334,10 @@ const EducationInput: React.FC<EducationInputProps> = ({
                   </div> */}
               
 
-                  <DateRangePicker
-                    startDate={edu.startDate}
-                    endDate={edu.endDate}
-                    onChange={(s, e) => {
-                      console.log(s, e);
-                      handleEducationChange(
-                        index,
-                        "startDate",
-                        s ? new Date(s) : null
-                      );
-                      handleEducationChange(
-                        index,
-                        "endDate",
-                        e ? new Date(e) : null
-                      );
-                    }}
-                    placeholder="Select dates"
-                    className="w-80"
-                    format="MM/DD/YY"
-    
-                    showPresets={true}
-                    showClear={true}
-                  />
+                   <DateRangePicker
+        ranges={[selectionRange]}
+        onChange={handleSelect}
+      />
                   {/* <DateRangePicker
                     startDate={edu.startDate}
                     endDate={edu.endDate}

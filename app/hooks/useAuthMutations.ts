@@ -19,7 +19,7 @@ export interface RegisterData {
     password: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/administration';
 
 const login = async (data: LoginData): Promise<AuthResponse> => {
     const response = await axios.post<AuthResponse>(`${API_URL}/auth/login`, data);
@@ -27,7 +27,7 @@ const login = async (data: LoginData): Promise<AuthResponse> => {
 };
 
 const register = async (data: CreateUserDto): Promise<AuthResponse> => {
-    const response = await axios.post<AuthResponse>(`${API_URL}/auth/register`, data);
+    const response = await axios.post<AuthResponse>(`${API_URL}/administration/auth/register`, data);
     return response.data;
 };
 

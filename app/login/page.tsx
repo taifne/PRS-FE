@@ -33,7 +33,7 @@ export default function LoginPage() {
             maxAge: rememberMe ? 60 * 60 * 24 * 30 : 60 * 60 * 24,
           });
           setRefetchCookies((prev) => prev + 1);
-          push('/order');
+          push('/');
         },
         onError: (error) => {
           console.log("Login failed:", error);

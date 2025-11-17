@@ -10,10 +10,9 @@ import { FaTrashAlt } from "react-icons/fa";
 import Table, { Column } from "../../components/table";
 import {
   useAllResumes,
-  useCreateResume,
   useDeleteResume,
 } from "../../hooks/useResumeMutation";
-import { Certification, Education, Experience, Language, Link, PersonalProject, Reference, Resume, VolunteerWork } from "../../type/resume.type";
+import { Resume } from "../../type/resume.type";
 import { getCookie } from "cookies-next";
 
 type ResumeMapped = Resume & {
@@ -26,36 +25,36 @@ type ResumeMapped = Resume & {
 const ResumesPage: React.FC = () => {
   const userId = getCookie("userId")?.toString();
   const { data: resumes, isLoading } = useAllResumes(userId??"");
-  const { mutate: createResume } = useCreateResume();
+  // const { mutate: createResume } = useCreateResume();
   const { mutate: deleteResume } = useDeleteResume();
 const [title, setTitle] = useState<string>("");
 const [template, setTemplate] = useState<string>("");
-const [fullName, setFullName] = useState<string>("");
-const [email, setEmail] = useState<string>("");
-const [phoneNumber, setPhoneNumber] = useState<string>("");
-const [yearBorn, setYearBorn] = useState<number | undefined>(undefined);
-const [address, setAddress] = useState<string>("");
-const [avatarUrl, setAvatarUrl] = useState<string>("");
-const [linkedinUrl, setLinkedinUrl] = useState<string>("");
-const [githubUrl, setGithubUrl] = useState<string>("");
-const [website, setWebsite] = useState<string>("");
-const [desiredPosition, setDesiredPosition] = useState<string>("");
-const [desiredSalary, setDesiredSalary] = useState<string>("");
-const [availableFrom, setAvailableFrom] = useState<Date | undefined>(undefined);
-const [summary, setSummary] = useState<string>("");
-const [skills, setSkills] = useState<string[]>([]);
-const [experience, setExperience] = useState<Experience[]>([]);
-const [education, setEducation] = useState<Education[]>([]);
-const [personalProjects, setPersonalProjects] = useState<PersonalProject[]>([]);
-const [certifications, setCertifications] = useState<Certification[]>([]);
-const [languages, setLanguages] = useState<Language[]>([]);
-const [links, setLinks] = useState<Link[]>([]);
-const [volunteerWork, setVolunteerWork] = useState<VolunteerWork[]>([]);
-const [references, setReferences] = useState<Reference[]>([]);
-const [visibility, setVisibility] = useState<'private' | 'public' | 'linkOnly'>("private");
-const [isDefault, setIsDefault] = useState<boolean>(false);
-const [generatedText, setGeneratedText] = useState<string>("");
-const [isPublished, setIsPublished] = useState<boolean>(false);
+// const [fullName, setFullName] = useState<string>("");
+// const [email, setEmail] = useState<string>("");
+// const [phoneNumber, setPhoneNumber] = useState<string>("");
+// const [yearBorn, setYearBorn] = useState<number | undefined>(undefined);
+// const [address, setAddress] = useState<string>("");
+// const [avatarUrl, setAvatarUrl] = useState<string>("");
+// const [linkedinUrl, setLinkedinUrl] = useState<string>("");
+// const [githubUrl, setGithubUrl] = useState<string>("");
+// const [website, setWebsite] = useState<string>("");
+// const [desiredPosition, setDesiredPosition] = useState<string>("");
+// const [desiredSalary, setDesiredSalary] = useState<string>("");
+// const [availableFrom, setAvailableFrom] = useState<Date | undefined>(undefined);
+// const [summary, setSummary] = useState<string>("");
+// const [skills, setSkills] = useState<string[]>([]);
+// const [experience, setExperience] = useState<Experience[]>([]);
+// const [education, setEducation] = useState<Education[]>([]);
+// const [personalProjects, setPersonalProjects] = useState<PersonalProject[]>([]);
+// const [certifications, setCertifications] = useState<Certification[]>([]);
+// const [languages, setLanguages] = useState<Language[]>([]);
+// const [links, setLinks] = useState<Link[]>([]);
+// const [volunteerWork, setVolunteerWork] = useState<VolunteerWork[]>([]);
+// const [references, setReferences] = useState<Reference[]>([]);
+// const [visibility, setVisibility] = useState<'private' | 'public' | 'linkOnly'>("private");
+// const [isDefault, setIsDefault] = useState<boolean>(false);
+// const [generatedText, setGeneratedText] = useState<string>("");
+// const [isPublished, setIsPublished] = useState<boolean>(false);
 
   const [isOpenAddPopup, setIsOpenAddPopup] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -64,58 +63,58 @@ const [isPublished, setIsPublished] = useState<boolean>(false);
     new Set()
   );
 
- const handleCreate = () => {
-  if (!title || !template || !fullName || !email) {
-    setMessage("Title, Template, Full Name, and Email are required");
-    setShowToast(true);
-    return;
-  }
+//  const handleCreate = () => {
+//   if (!title || !template || !fullName || !email) {
+//     setMessage("Title, Template, Full Name, and Email are required");
+//     setShowToast(true);
+//     return;
+//   }
 
-  createResume(
-    {
-      title,
-      template,
-      fullName,
-      email,
-      phoneNumber,
-      yearBorn,
-      address,
-      avatarUrl,
-      linkedinUrl,
-      githubUrl,
-      website,
-      desiredPosition,
-      desiredSalary,
-      availableFrom,
-      summary,
-      skills,
-      experience,
-      education,
-      personalProjects,
-      certifications,
-      languages,
-      links,
-      volunteerWork,
-      references,
-      visibility,
-      isDefault,
-      generatedText,
-      isPublished,
-    },
-    {
-      onSuccess: () => {
-        setMessage("Resume created successfully");
-        setShowToast(true);
-        setIsOpenAddPopup(false);
-        setTitle("");
-        setTemplate("");
-        setFullName("");
-        setEmail("");
-        // Optionally reset other form states here
-      },
-    }
-  );
-};
+//   createResume(
+//     {
+//       title,
+//       template,
+//       fullName,
+//       email,
+//       phoneNumber,
+//       yearBorn,
+//       address,
+//       avatarUrl,
+//       linkedinUrl,
+//       githubUrl,
+//       website,
+//       desiredPosition,
+//       desiredSalary,
+//       availableFrom,
+//       summary,
+//       skills,
+//       experience,
+//       education,
+//       personalProjects,
+//       certifications,
+//       languages,
+//       links,
+//       volunteerWork,
+//       references,
+//       visibility,
+//       isDefault,
+//       generatedText,
+//       isPublished,
+//     },
+//     {
+//       onSuccess: () => {
+//         setMessage("Resume created successfully");
+//         setShowToast(true);
+//         setIsOpenAddPopup(false);
+//         setTitle("");
+//         setTemplate("");
+//         setFullName("");
+//         setEmail("");
+//         // Optionally reset other form states here
+//       },
+//     }
+//   );
+// };
 
 
   const handleDelete = (id: string) => {
@@ -248,7 +247,7 @@ const [isPublished, setIsPublished] = useState<boolean>(false);
             fullWidth
           />
           <button
-            onClick={handleCreate}
+            // onClick={handleCreate}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
           >
             Create Resume

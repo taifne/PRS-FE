@@ -12,10 +12,6 @@ export function middleware(request: NextRequest) {
       return Response.redirect(new URL('/login', request.url))
     }
   }
-
-
-
-
 }
 
 export const config = {

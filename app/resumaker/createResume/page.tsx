@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  PDFDownloadLink,
   PDFViewer,
 } from "@react-pdf/renderer";
 import { StepInput } from "../../components/StepInput";
@@ -25,6 +26,7 @@ import PersonalInfoSection, {
 import { BriefcaseIcon } from "lucide-react";
 import templateMap, { templateOptions } from "../Component/Template";
 import { CustomSelect } from "../../components/Select";
+import ContractInquiryForm from "./somethig";
 
 const CreateResumePage: React.FC = () => {
   const [selectedTemplateKey, setSelectedTemplateKey] = useState<string>(
@@ -436,7 +438,11 @@ const resume = useMemo(() => ({
 
     return true;
   };
-
+  const handleListen = () => {
+    const utterance = new SpeechSynthesisUtterance("i love you so much , i am supper man");
+    // Optional: set voice, language, rate, pitch here
+    speechSynthesis.speak(utterance);
+  };
   return (
     <div className="flex w-full h-screen">
       <div className="w-1/2 p-6 overflow-visible h-[860px] ">
@@ -472,9 +478,30 @@ const resume = useMemo(() => ({
       </div>
       <div className="w-1/2 p-4 bg-gray-100">
         <div className="mt-4 h-[80vh]">
-          <PDFViewer style={{ width: "100%", height: "100%" }}>
+    <div style={{ padding: 20 }}>
+      <h2>Download Contract Inquiry PDF</h2>
+      <>  <button onClick={handleListen}>
+      🔊 Listen
+    </button></>
+        <PDFViewer showToolbar={false} style={{ width: "100%", height: "100%",padding:"0px" }}>
             <SelectedTemplateComponent resume={resume} />
           </PDFViewer>
+
+      <PDFDownloadLink
+        document={<ContractInquiryForm />}
+        fileName="contract-inquiry-form.pdf"
+        style={{
+          padding: 10,
+          backgroundColor: 'blue',
+          color: 'white',
+          borderRadius: 4,
+          textDecoration: 'none'
+        }}
+      >
+        {({ loading }) => loading ? 'Preparing document...' : 'Download PDF'}
+      </PDFDownloadLink>
+    </div>
+
         </div>
       </div>
     </div>

@@ -1,27 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { User, CreateUserDto, UpdateUserDto, UpdateUserRoleDto } from '../type/user-role.type';
+import { Paginated } from '../type/pagination';
+import { SearchUserRequest } from '../type/user.type';
+import { buildParams } from '../utils/buildParams';
 
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+export const useLazyUsers = (filters: SearchUserRequest) => {
+  const queryString = buildParams(filters);
 
-export const useLazyUsers = (filters: {
-  username?: string;
-  email?: string;
-  role?: string;
-}) => {
-  const queryString = new URLSearchParams(filters).toString();
-  console.log(queryString);
-  return useQuery<User[]>({
-    queryKey: ['users', filters],
+  return useQuery<Paginated<User>>({
+    queryKey: ["users", filters],
     queryFn: async () => {
-      const res = await axios.get(`${API}/users/search?${queryString}`);
+      const res = await axios.get<Paginated<User>>(
+        `${API}/users/search?${queryString}`
+      );
       return res.data;
     },
-    enabled: false, 
+    enabled: false, // lazy
   });
 };
-
 export const useAllUsers = () => {
   return useQuery<User[]>({
     queryKey: ['users'],

@@ -202,30 +202,46 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: "#718096",
   },
-  publicationItem: {
-    marginBottom: 10,
+  projectItem: {
+    marginBottom: 15,
   },
-  pubTitle: {
-    fontSize: 10,
+  projectName: {
+    fontSize: 11,
     fontWeight: "bold",
     color: "#2d3748",
     marginBottom: 2,
   },
-  pubDetails: {
+  projectDetails: {
     fontSize: 9,
     color: "#4a5568",
+    marginBottom: 3,
   },
-  courtItem: {
-    marginBottom: 8,
+  projectTech: {
+    fontSize: 8,
+    color: "#718096",
+    fontStyle: "italic",
   },
-  courtName: {
+  volunteerItem: {
+    marginBottom: 12,
+  },
+  volunteerOrg: {
     fontSize: 10,
     fontWeight: "bold",
     color: "#2d3748",
+    marginBottom: 1,
   },
-  admissionDate: {
+  volunteerRole: {
     fontSize: 9,
-    color: "#718096",
+    color: "#4a5568",
+    marginBottom: 1,
+  },
+  linkItem: {
+    marginBottom: 8,
+  },
+  linkText: {
+    fontSize: 9,
+    color: "#2c5282",
+    textDecoration: "none",
   },
 });
 
@@ -248,21 +264,9 @@ const LawIcon = () => (
   </Svg>
 );
 
-const CourtIcon = () => (
-  <Svg viewBox="0 0 24 24" style={styles.sectionIcon}>
-    <Path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z" fill="#2c5282" />
-  </Svg>
-);
-
 const SkillIcon = () => (
   <Svg viewBox="0 0 24 24" style={styles.sectionIcon}>
     <Path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z" fill="#2c5282" />
-  </Svg>
-);
-
-const PublicationIcon = () => (
-  <Svg viewBox="0 0 24 24" style={styles.sectionIcon}>
-    <Path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM12 7h-2v2h-2v2h2v2h2v-2h2V9h-2z" fill="#2c5282" />
   </Svg>
 );
 
@@ -291,11 +295,13 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
               <Text>📱 {resume.phoneNumber}</Text>
             </View>
             <View style={styles.contactItem}>
-              <Text>🏛️ {resume.barNumber || "Member in Good Standing"}</Text>
-            </View>
-            <View style={styles.contactItem}>
               <Text>📍 {resume.address}</Text>
             </View>
+            {resume.website && (
+              <View style={styles.contactItem}>
+                <Text>🌐 {resume.website.replace("https://", "")}</Text>
+              </View>
+            )}
           </View>
         </View>
         
@@ -317,7 +323,7 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
               <Text style={styles.sectionTitle}>PROFESSIONAL PROFILE</Text>
             </View>
             <Text style={styles.summaryText}>
-              {resume.summary || "Highly skilled attorney with extensive experience in litigation and legal counsel. Proven track record of successful case outcomes and client advocacy. Specialized knowledge in corporate law with exceptional research, writing, and oral advocacy skills. Dedicated to providing strategic legal solutions with the highest ethical standards."}
+              {resume.summary}
             </Text>
           </View>
 
@@ -338,6 +344,9 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
                   </Text>
                 </View>
                 <Text style={styles.role}>{exp.role} | {exp.location}</Text>
+                <Text style={{ fontSize: 10, color: "#4a5568", marginBottom: 8 }}>
+                  {exp.description}
+                </Text>
                 {exp.achievements.map((a: string, j: number) => (
                   <View key={j} style={styles.achievementItem}>
                     <Text style={styles.achievementBullet}>•</Text>
@@ -348,26 +357,21 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
             ))}
           </View>
 
-          {/* Notable Cases */}
-          {resume.notableCases && resume.notableCases.length > 0 && (
+          {/* Projects */}
+          {resume.personalProjects && resume.personalProjects.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <CourtIcon />
-                <Text style={styles.sectionTitle}>NOTABLE CASES</Text>
+                <GavelIcon />
+                <Text style={styles.sectionTitle}>PRO BONO & LEGAL PROJECTS</Text>
               </View>
               
-              {resume.notableCases.map((caseItem: any, i: number) => (
-                <View key={i} style={styles.jobItem}>
-                  <View style={styles.jobTimeline} />
-                  <View style={styles.jobHeader}>
-                    <Text style={styles.company}>{caseItem.caseName}</Text>
-                    <Text style={styles.date}>{caseItem.year}</Text>
-                  </View>
-                  <Text style={{ fontSize: 10, marginBottom: 5, fontStyle: "italic" }}>
-                    {caseItem.court}, {caseItem.jurisdiction}
-                  </Text>
-                  <Text style={{ fontSize: 10, lineHeight: 1.4 }}>
-                    {caseItem.description}
+              {resume.personalProjects.map((project: any, i: number) => (
+                <View key={i} style={styles.projectItem}>
+                  <Text style={styles.projectName}>{project.persionalProjectName}</Text>
+                  <Text style={styles.projectDetails}>{project.domain} • {project.time}</Text>
+                  <Text style={{ fontSize: 10, marginBottom: 5 }}>{project.description}</Text>
+                  <Text style={styles.projectTech}>
+                    {project.technologies.join(" • ")}
                   </Text>
                 </View>
               ))}
@@ -389,47 +393,28 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
                 <Text style={styles.institution}>{edu.institution}</Text>
                 <Text style={styles.degree}>{edu.degree}</Text>
                 <Text style={styles.educationDate}>
-                  {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                  {formatDate(edu.startDate)} - {formatDate(edu.endDate)} | {edu.location}
                 </Text>
-                {edu.honors && (
-                  <Text style={{ fontSize: 9, color: "#2c5282", fontStyle: "italic" }}>
-                    {edu.honors}
+                {edu.gpa && (
+                  <Text style={{ fontSize: 9, color: "#2c5282" }}>
+                    GPA: {edu.gpa}
                   </Text>
                 )}
               </View>
             ))}
           </View>
 
-          {/* Bar Admissions */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <CourtIcon />
-              <Text style={styles.sectionTitle}>BAR ADMISSIONS</Text>
-            </View>
-            
-            {resume.certifications.map((certification: any, i: number) => (
-              <View key={i} style={styles.courtItem}>
-                <Text style={styles.courtName}>{certification.cerName}</Text>
-                <Text style={styles.admissionDate}>Admitted: {certification.issuer}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* Legal Skills */}
+          {/* Skills */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <SkillIcon />
-              <Text style={styles.sectionTitle}>LEGAL SKILLS</Text>
+              <Text style={styles.sectionTitle}>LEGAL EXPERTISE</Text>
             </View>
             
             <View style={styles.skillContainer}>
-              {resume.volunteerWork.map((volunteer: any, i: number) => (
-                <View key={i} style={{ marginBottom: 8 }}>
-                  <Text style={styles.skillName}>{volunteer.org}</Text>
-                  <View style={styles.barContainer}>
-                 <View style={[styles.barFill, { width: volunteer.role }]} />
-
-                  </View>
+              {resume.skills.map((skill: string, i: number) => (
+                <View key={i} style={styles.skillItem}>
+                  <Text style={styles.skillName}>{skill}</Text>
                 </View>
               ))}
             </View>
@@ -445,27 +430,10 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
               
               {resume.certifications.map((cert: any, i: number) => (
                 <View key={i} style={styles.certificationItem}>
-                  <Text style={styles.certName}>{cert.name}</Text>
+                  <Text style={styles.certName}>{cert.cerName}</Text>
                   <Text style={styles.certIssuer}>{cert.issuer}</Text>
-                  <Text style={styles.certDate}>{cert.year}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {/* Publications */}
-          {resume.publications && resume.publications.length > 0 && (
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <PublicationIcon />
-                <Text style={styles.sectionTitle}>PUBLICATIONS</Text>
-              </View>
-              
-              {resume.publications.map((pub: any, i: number) => (
-                <View key={i} style={styles.publicationItem}>
-                  <Text style={styles.pubTitle}>{pub.title}</Text>
-                  <Text style={styles.pubDetails}>
-                    {pub.journal}, {pub.year}
+                  <Text style={styles.certDate}>
+                    {formatDate(cert.date)}
                   </Text>
                 </View>
               ))}
@@ -482,12 +450,49 @@ const AttorneyResumeTemplate: React.FC<{ resume: any }> = ({ resume }) => (
               
               <View style={styles.skillContainer}>
                 {resume.languages.map((lang: any, i: number) => (
-                  <View key={i} style={{ marginBottom: 8 }}>
-                    <Text style={styles.skillName}>{lang.language}</Text>
-                    <Text style={{ fontSize: 9, color: "#4a5568" }}>{lang.proficiency}</Text>
+                  <View key={i} style={styles.skillItem}>
+                    <Text style={styles.skillName}>
+                      {lang.langueName} <Text style={{ fontWeight: "normal" }}>({lang.level})</Text>
+                    </Text>
                   </View>
                 ))}
               </View>
+            </View>
+          )}
+
+          {/* Volunteer Work */}
+          {resume.volunteerWork && resume.volunteerWork.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <LawIcon />
+                <Text style={styles.sectionTitle}>COMMUNITY INVOLVEMENT</Text>
+              </View>
+              
+              {resume.volunteerWork.map((vol: any, i: number) => (
+                <View key={i} style={styles.volunteerItem}>
+                  <Text style={styles.volunteerOrg}>{vol.org}</Text>
+                  <Text style={styles.volunteerRole}>{vol.role} • {formatDate(vol.startDate)} - {formatDate(vol.endDate)}</Text>
+                  <Text style={{ fontSize: 9, color: "#4a5568" }}>{vol.description}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Links */}
+          {resume.links && resume.links.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <SkillIcon />
+                <Text style={styles.sectionTitle}>LINKS</Text>
+              </View>
+              
+              {resume.links.map((link: any, i: number) => (
+                <View key={i} style={styles.linkItem}>
+                  <Text style={styles.linkText}>
+                    {link.label}: {link.url.replace("https://", "")}
+                  </Text>
+                </View>
+              ))}
             </View>
           )}
         </View>

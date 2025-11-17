@@ -11,20 +11,13 @@ import { cookies } from "next/headers";
 
 import {
   AutocompleteIcon,
-  ChartIcon,
   CustomTableIcon,
   PagnitionIcon,
   PopupIcon,
   StepperIcon,
-  ToastIcon,
-  TreeViewIcon,
   UserIcon,
 } from "./components/Icons";
 import {
-  FaInfoCircle,
-  FaCogs,
-  FaPhone,
-  FaRegGem,
   FaHeart,
   FaChartArea,
   FaRegIdCard,
@@ -32,16 +25,14 @@ import {
 import Breadcrumb, { BreadcrumbItem } from "./components/Breadcrumb";
 import Navbar from "./components/NavBar";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { Loading } from "./components/Loading";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback";
-import { ThemeProvider, useTheme } from "next-themes";
-import { IconButton } from "@mui/material";
+import { ThemeProvider } from "next-themes";
 import { PiTabsDuotone, PiTreeViewFill } from "react-icons/pi";
 import { AiOutlineDash, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { setCookie, getCookie, deleteCookie } from "cookies-next";
+import {  getCookie, deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation';
 
@@ -51,8 +42,6 @@ import {
   useThemeStore,
   useUserRoleStore,
 } from "./stores/layoutStore";
-import { USER_ROLES } from "./constants";
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -67,14 +56,14 @@ const geistMono = localFont({
   display: "swap",
 });
 const generateBreadcrumbItems = (path: string): BreadcrumbItem[] => {
-  const segments = path.split("/").filter(Boolean); // Split and remove empty parts
+  const segments = path.split("/").filter(Boolean); 
   let fullPath = "";
   
   return segments.map((segment, index) => {
     fullPath += `/${segment}`;
     return {
-      label: segment.charAt(0).toUpperCase() + segment.slice(1), // Capitalize first letter
-      link: index !== segments.length - 1 ? fullPath : undefined, // Last item has no link
+      label: segment.charAt(0).toUpperCase() + segment.slice(1), 
+      link: index !== segments.length - 1 ? fullPath : undefined, 
     };
   });
 };
