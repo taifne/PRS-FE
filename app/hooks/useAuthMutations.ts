@@ -3,9 +3,23 @@ import axios from 'axios';
 import { CreateUserDto } from '../type/user-role.type';
 
 export interface AuthResponse {
-    accessToken: string;
-    userRole:string;
-    userId:string;
+    success: boolean;
+    message: string;
+    data: {
+        accessToken: string;
+        refreshToken: string;
+        tokenType: string;
+        expiresIn: number;
+        user: {
+            id: string;
+            email: string;
+            userName: string;
+            role: {
+                _id: string;
+                name: string;
+            }[];
+        };
+    };
 }
 
 export interface LoginData {

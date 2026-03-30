@@ -61,77 +61,77 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-    const [roleId, setRoleId] = useState("");
+  const [roleId, setRoleId] = useState("");
   const sidebarRef = useRef<HTMLDivElement>(null);
-    const { refetchCookies, setRefetchCookies } = useOpenModalStore();
-      const icons = [
-  <AutocompleteIcon />,
-  <PiTreeViewFill />,
-  <FaHeart />,
-  <FaRegIdCard />,
-  <FaChartArea />,
-  <SlDrawer />,
-  <MdInsertEmoticon />,
-  <MdInput />,
-  <LuLoaderCircle />,
-  <PagnitionIcon />,
-  <PopupIcon />,
-  <StepperIcon />,
-  <CustomTableIcon />,
-  <MdAnnouncement />,
-  <AiOutlineDash />,
-  <IoIosArrowDropdownCircle />,
-  <PiTabsDuotone />,
-];
-function getRandomIcon(icons: JSX.Element[]): JSX.Element {
-  const index = Math.floor(Math.random() * icons.length);
-  return icons[index];
-}
+  //const { refetchCookies, setRefetchCookies } = useOpenModalStore();
+  const icons = [
+    <AutocompleteIcon />,
+    <PiTreeViewFill />,
+    <FaHeart />,
+    <FaRegIdCard />,
+    <FaChartArea />,
+    <SlDrawer />,
+    <MdInsertEmoticon />,
+    <MdInput />,
+    <LuLoaderCircle />,
+    <PagnitionIcon />,
+    <PopupIcon />,
+    <StepperIcon />,
+    <CustomTableIcon />,
+    <MdAnnouncement />,
+    <AiOutlineDash />,
+    <IoIosArrowDropdownCircle />,
+    <PiTabsDuotone />,
+  ];
+  function getRandomIcon(icons: JSX.Element[]): JSX.Element {
+    const index = Math.floor(Math.random() * icons.length);
+    return icons[index];
+  }
 
   const pathname = usePathname();
-      const { data: role, isLoading, isError } = useRole(roleId);
-        const { data: menus, isLoading: loadingMenus } = useAllMenus();
-  useEffect(() => {
-    const userRoleCookie = getCookie("userRole")?.toString()??"";
+  const { data: role, isLoading, isError } = useRole(roleId);
+  const { data: menus, isLoading: loadingMenus } = useAllMenus();
+  // useEffect(() => {
+  //   const userRoleCookie = getCookie("userRole")?.toString()??"";
 
-    setRoleId(userRoleCookie);
-  }, [refetchCookies]);
+  //   setRoleId(userRoleCookie);
+  // }, [refetchCookies]);
 
-    const filteredMenus = useMemo(() => {
+  const filteredMenus = useMemo(() => {
     if (!role?.menus) return [];
 
     const roleMenuIds = role.menus.map((m) =>
       typeof m === 'string' ? m : m._id // handles both populated and non-populated
     );
 
-    return menus?.filter((menu) => roleMenuIds.includes(menu._id)) .map((menu) => ({
-        label: menu.label,
-        icon:  getRandomIcon(icons),
-        link: `http://localhost:8080/${menu.path}`,
-        subItems:[]
-        // Optional: include subItems if you have hierarchical menus
-      }));;
+    return menus?.filter((menu) => roleMenuIds.includes(menu._id)).map((menu) => ({
+      label: menu.label,
+      icon: getRandomIcon(icons),
+      link: `http://localhost:8080/${menu.path}`,
+      subItems: []
+      // Optional: include subItems if you have hierarchical menus
+    }));;
   }, [menus, role?.menus]);
   const themeConfig: SidebarTheme =
     typeof theme === "string"
       ? {
-          light: {
-            background: "bg-white dark:bg-gray-800",
-            text: "text-gray-800 dark:text-gray-200",
-            activeBackground: "bg-blue-100 dark:bg-blue-800",
-            activeText: "text-blue-600 dark:text-blue-200",
-            hoverBackground: "hover:bg-gray-100 dark:hover:bg-gray-700",
-            border: "border-gray-200 dark:border-gray-700",
-          },
-          dark: {
-            background: "bg-gray-900 dark:bg-gray-800",
-            text: "text-gray-200 dark:text-gray-200",
-            activeBackground: "bg-blue-800 dark:bg-blue-800",
-            activeText: "text-blue-200 dark:text-blue-200",
-            hoverBackground: "hover:bg-gray-800 dark:hover:bg-gray-700",
-            border: "border-gray-700 dark:border-gray-700",
-          },
-        }[theme]
+        light: {
+          background: "bg-white dark:bg-gray-800",
+          text: "text-gray-800 dark:text-gray-200",
+          activeBackground: "bg-blue-100 dark:bg-blue-800",
+          activeText: "text-blue-600 dark:text-blue-200",
+          hoverBackground: "hover:bg-gray-100 dark:hover:bg-gray-700",
+          border: "border-gray-200 dark:border-gray-700",
+        },
+        dark: {
+          background: "bg-gray-900 dark:bg-gray-800",
+          text: "text-gray-200 dark:text-gray-200",
+          activeBackground: "bg-blue-800 dark:bg-blue-800",
+          activeText: "text-blue-200 dark:text-blue-200",
+          hoverBackground: "hover:bg-gray-800 dark:hover:bg-gray-700",
+          border: "border-gray-700 dark:border-gray-700",
+        },
+      }[theme]
       : theme;
 
   // Add dark mode detection
@@ -222,9 +222,8 @@ function getRandomIcon(icons: JSX.Element[]): JSX.Element {
       {/* Enhanced Header */}
       {showLogo && (
         <motion.div
-          className={`flex items-center p-4 border-none ${
-            isCollapsed ? "justify-center" : "justify-between"
-          }`}
+          className={`flex items-center p-4 border-none ${isCollapsed ? "justify-center" : "justify-between"
+            }`}
         >
           {!isCollapsed && (
             <motion.div
@@ -241,11 +240,10 @@ function getRandomIcon(icons: JSX.Element[]): JSX.Element {
           )}
           <button
             onClick={toggleCollapse}
-            className={`p-2 rounded-lg transition-all ${
-              isDarkMode
+            className={`p-2 rounded-lg transition-all ${isDarkMode
                 ? "hover:bg-gray-700 text-gray-300"
                 : "hover:bg-gray-100 text-gray-600"
-            }`}
+              }`}
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <FaBars /> : <FaTimes />}
@@ -261,18 +259,16 @@ function getRandomIcon(icons: JSX.Element[]): JSX.Element {
               <Link href={item.link} passHref>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className={`flex items-center rounded-lg p-3 cursor-pointer transition-all ${
-                    isActiveLink(item.link)
+                  className={`flex items-center rounded-lg p-3 cursor-pointer transition-all ${isActiveLink(item.link)
                       ? `${themeConfig.activeBackground} ${themeConfig.activeText}`
                       : themeConfig.hoverBackground
-                  }`}
+                    }`}
                   onClick={() => item.subItems && handleSubMenu(item.link)}
                 >
                   <div className="flex items-center w-full space-x-3">
                     <span
-                      className={`text-lg ${
-                        isActiveLink(item.link) ? "opacity-100" : "opacity-75"
-                      }`}
+                      className={`text-lg ${isActiveLink(item.link) ? "opacity-100" : "opacity-75"
+                        }`}
                     >
                       {item.icon}
                     </span>
@@ -285,7 +281,7 @@ function getRandomIcon(icons: JSX.Element[]): JSX.Element {
                         {item.label}
                       </motion.span>
                     )}
-                  
+
                     {item.subItems && !isCollapsed && (
                       <motion.div
                         className="ml-auto"

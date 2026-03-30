@@ -25,6 +25,7 @@ body {
     text-wrap: balance;
   }
 }
+
 /* Basic layout */
 .calendar-container {
   font-family: 'Arial', sans-serif;
@@ -113,6 +114,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 /* Basic container for the tabs */
 .tabs-container {
   display: flex;
@@ -164,49 +166,87 @@ body {
 
 
 
-.resizer {  /* Improved styling for the resizer */
-    cursor: col-resize;
-    width: 2px; /* Make it slightly wider for easier grabbing */
-    background-color: #ccc; /* Or any other suitable color */
-    right: 0; /* Align to the right edge of the cell */
-    top: 0;
-    height: 100%;
-    position: absolute;  /* Absolutely positioned within the header cell */
-    z-index: 1; /* Ensure it's above other content */
-    transition: background-color 0.2s ease; /* Smooth hover effect */
+.resizer {
+  /* Improved styling for the resizer */
+  cursor: col-resize;
+  width: 2px;
+  /* Make it slightly wider for easier grabbing */
+  background-color: #ccc;
+  /* Or any other suitable color */
+  right: 0;
+  /* Align to the right edge of the cell */
+  top: 0;
+  height: 100%;
+  position: absolute;
+  /* Absolutely positioned within the header cell */
+  z-index: 1;
+  /* Ensure it's above other content */
+  transition: background-color 0.2s ease;
+  /* Smooth hover effect */
 }
 
 .resizer:hover {
-    background-color: #666;
+  background-color: #666;
 }
 
 table {
-    table-layout: fixed;
-    width: 100%;
- 
+  table-layout: fixed;
+  width: 100%;
+
 }
+
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes scalePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
 }
 
- @keyframes fadeIn {
-   from { opacity: 0; }
-   to { opacity: 1; } }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 
- @keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-   to { transform: translateY(0); opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
- @keyframes zoomIn {
-   from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
@@ -218,6 +258,7 @@ table {
 .animate-zoomIn {
   animation: zoomIn 0.3s ease-in-out;
 }
+
 .calendar-day {
   transition: all 0.2s ease-in-out;
 }
@@ -225,59 +266,87 @@ table {
 .calendar-day:hover {
   transform: scale(1.05);
 }
+
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 10px; /* Width of the scrollbar */
-  height: 10px; /* Height of the horizontal scrollbar */
+  width: 10px;
+  /* Width of the scrollbar */
+  height: 10px;
+  /* Height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Color of the track */
-  border-radius: 5px; /* Rounded corners */
+  background: #f1f1f1;
+  /* Color of the track */
+  border-radius: 5px;
+  /* Rounded corners */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the scrollbar thumb */
-  border-radius: 5px; /* Rounded corners */
+  background: #888;
+  /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  /* Rounded corners */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color of the scrollbar thumb on hover */
+  background: #555;
+  /* Color of the scrollbar thumb on hover */
 }
 
 /* For Firefox */
 * {
-  scrollbar-width: thin; /* "auto" or "thin" */
-  scrollbar-color: #888 #f1f1f1; /* thumb and track color */
+  scrollbar-width: thin;
+  /* "auto" or "thin" */
+  scrollbar-color: #888 #f1f1f1;
+  /* thumb and track color */
 }
+
 @keyframes ripple {
-  from { transform: scale(0); opacity: 1; }
-  to { transform: scale(4); opacity: 0; }
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 .animate-ripple {
   animation: ripple 600ms linear;
 }
+
 @layer utilities {
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
- /* Hide scrollbar for IE, Edge and Firefox */
+
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-}
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
 }
 
 step
+
 /* Smooth transitions for all interactive elements */
-button, .education-card, input, textarea {
+button,
+.education-card,
+input,
+textarea {
   transition: all 0.3s ease;
 }
 
 /* Better focus states */
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
@@ -298,7 +367,9 @@ textarea {
 }
 
 /* Smooth transitions for all interactive elements */
-button, .certification-card, input {
+button,
+.certification-card,
+input {
   transition: all 0.3s ease;
 }
 
@@ -321,4 +392,73 @@ input:focus {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  @apply outline-none min-h-[500px];
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-gray-400 float-left h-0 pointer-events-none;
+}
+
+/* Collaboration Cursor Styles */
+.collaboration-cursor__caret {
+  @apply relative border-l border-r border-transparent pointer-events-none;
+}
+
+.collaboration-cursor__label {
+  @apply absolute top-0 left-0 text-xs text-white whitespace-nowrap rounded px-1 py-0.5 -translate-y-full;
+}
+
+/* Prose Styles */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-4xl font-bold mt-8 mb-4;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold mt-6 mb-3;
+}
+
+.prose h3 {
+  @apply text-2xl font-bold mt-4 mb-2;
+}
+
+.prose p {
+  @apply mb-4 leading-relaxed;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic my-4;
+}
+
+.prose code {
+  @apply bg-gray-100 rounded px-1 py-0.5 text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-100 rounded-lg p-4 overflow-x-auto;
+}
+
+.prose img {
+  @apply rounded-lg shadow-md my-4;
+}
+
+.prose a {
+  @apply text-blue-500 hover:text-blue-600 underline;
 }

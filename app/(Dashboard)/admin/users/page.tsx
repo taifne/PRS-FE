@@ -152,7 +152,7 @@ const UsersPage: React.FC = () => {
   const options =
     roles?.map((r) => ({
       label: r.name,
-      value: r._id,
+      value: r.id,
     })) || [];
   const darkMode = useMemo(() => theme === "dark", [theme]);
 
@@ -195,7 +195,6 @@ const UsersPage: React.FC = () => {
     refetchSearch();
   }, []);
   const dataTable = useMemo<UserMapped[]>(() => {
-    console.log(filteredUsers, "concac");
     const mapped = filteredUsers?.items?.map((u) => ({
       _id: u._id ?? "",
       displayName: u.displayName ?? "",
@@ -215,9 +214,8 @@ const UsersPage: React.FC = () => {
   const { columns } = useUserColumns({ isOpen, setIsOpen, handleDelete });
   return (
     <div
-      className={`max-w-8xl mx-auto p-4 min-h-screen shadow ${
-        darkMode ? "bg-gray-900" : "bg-white"
-      }`}
+      className={`max-w-8xl mx-auto p-4 min-h-screen shadow ${darkMode ? "bg-gray-900" : "bg-white"
+        }`}
     >
       <Loading
         isLoading={isLoading}
@@ -230,9 +228,8 @@ const UsersPage: React.FC = () => {
       />
 
       <div
-        className={`mb-4 p-4 rounded-md shadow ${
-          darkMode ? "bg-gray-800" : "bg-white"
-        }`}
+        className={`mb-4 p-4 rounded-md shadow ${darkMode ? "bg-gray-800" : "bg-white"
+          }`}
       >
         <div className="flex mb-4">
           <div className="flex gap-3 w-1/2"></div>
@@ -267,9 +264,8 @@ const UsersPage: React.FC = () => {
         <div className="flex flex-col gap-4 justify-between items-center mb-2 bg-gray-100 py-2 px-4 rounded">
           <div className="flex flex-row w-full justify-between items-center">
             <h2
-              className={`text-lg font-semibold ${
-                darkMode ? "text-white" : "text-gray-800"
-              }`}
+              className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-800"
+                }`}
             >
               Filters
             </h2>
@@ -324,7 +320,7 @@ const UsersPage: React.FC = () => {
                 onChange={setRole}
                 options={options}
                 placeholder="Choose role"
-                //error={error}
+              //error={error}
               />
               <button
                 onClick={handleSearch}
@@ -354,9 +350,8 @@ const UsersPage: React.FC = () => {
       </div>
 
       <div
-        className={`overflow-x-auto shadow-md rounded-lg ${
-          darkMode ? "bg-gray-800" : "bg-white"
-        }`}
+        className={`overflow-x-auto shadow-md rounded-lg ${darkMode ? "bg-gray-800" : "bg-white"
+          }`}
       >
         <Table
           columns={columns}
@@ -415,7 +410,7 @@ const UsersPage: React.FC = () => {
               onChange={setRole}
               options={options}
               placeholder="Choose role"
-              //error={error}
+            //error={error}
             />
           </div>
 

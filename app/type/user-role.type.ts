@@ -4,7 +4,7 @@ export interface User {
   _id: string;
   username: string;
   email: string;
-  role?: Role ;
+  role?: Role;
   isActive: boolean;
   displayName: string;
   startDate?: string;
@@ -43,7 +43,7 @@ export interface UpdateUserRoleDto {
 }
 
 export interface Role {
-  _id: string;
+  id: string;
   name: string;
   description?: string;
   menus?: Menu[];

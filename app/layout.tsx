@@ -7,8 +7,6 @@ import { MdAnnouncement, MdInput, MdInsertEmoticon } from "react-icons/md";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { LuLoaderCircle } from "react-icons/lu";
 import { SlDrawer } from "react-icons/sl";
-import { cookies } from "next/headers";
-
 import {
   AutocompleteIcon,
   CustomTableIcon,
@@ -32,7 +30,7 @@ import { ThemeProvider } from "next-themes";
 import { PiTabsDuotone, PiTreeViewFill } from "react-icons/pi";
 import { AiOutlineDash, AiOutlineLoading3Quarters } from "react-icons/ai";
 import { QueryClient, QueryClientProvider } from "react-query";
-import {  getCookie, deleteCookie } from "cookies-next";
+import { getCookie, deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation';
 
@@ -42,6 +40,8 @@ import {
   useThemeStore,
   useUserRoleStore,
 } from "./stores/layoutStore";
+import { initAuth } from "./lib/initAuth";
+import { useAuth } from "./hooks/useAuth";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -56,14 +56,14 @@ const geistMono = localFont({
   display: "swap",
 });
 const generateBreadcrumbItems = (path: string): BreadcrumbItem[] => {
-  const segments = path.split("/").filter(Boolean); 
+  const segments = path.split("/").filter(Boolean);
   let fullPath = "";
-  
+
   return segments.map((segment, index) => {
     fullPath += `/${segment}`;
     return {
-      label: segment.charAt(0).toUpperCase() + segment.slice(1), 
-      link: index !== segments.length - 1 ? fullPath : undefined, 
+      label: segment.charAt(0).toUpperCase() + segment.slice(1),
+      link: index !== segments.length - 1 ? fullPath : undefined,
     };
   });
 };
@@ -120,28 +120,27 @@ export default function RootLayout({
   const { role, setRole } = useUserRoleStore();
   // Get a cookie
   const [isHydrated, setIsHydrated] = useState(false);
+  const { isLoggedIn } = useAuth();
 
-useEffect(() => {
-  setIsHydrated(true);
-}, []);
+  useEffect(() => {
+    setIsHydrated(true);
+    //  initAuth();
+  }, []);
   const currentPage = usePathname();
   const breadcrumbItems = [{ label: "Home", link: "/" }, ...generateBreadcrumbItems(currentPage)];
   const { push } = useRouter();
   useEffect(() => {
     const userRoleCookie = getCookie("userRole")?.toString();
+
     const userRole =
       userRoleCookie === "admin"
         ? "admin"
         : userRoleCookie === "staff"
-        ? "staff"
-        : "common";
-    setRole(userRole);
-  }, [refetchCookies]);
-  const userToken = useMemo(() => {
-    const token = getCookie("token");
+          ? "staff"
+          : "common";
 
-    return token?.toString() ?? "";
-  }, [refetchCookies]);
+    setRole(userRole);
+  }, []);
 
   const sideBarItems = useMemo(() => {
     switch (role) {
@@ -169,16 +168,16 @@ useEffect(() => {
     <html lang="en">
       <head>
         <title>MbFibat</title>
-          <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-900`}
       >
-        {/* ✅ Moved providers inside <body> to fix hydration error */}
+
         <ThemeProvider attribute="class" defaultTheme="light">
           <QueryClientProvider client={queryClient}>
             <div className="flex min-h-screen overflow-hidden fixed h-screen w-full">
-              {userToken ? (
+              {isLoggedIn ? (
                 <>
                   {/* Sidebar */}
                   <Sidebar
@@ -240,9 +239,8 @@ useEffect(() => {
                 <>
                   <div className="flex flex-col flex-grow h-full overflow-auto w-full">
                     <main
-                      className={`mx-auto overflow-scroll no-scrollbar px-1 w-full ${
-                        userToken ? "mt-20" : "mt-0"
-                      }`}
+                      className={`mx-auto overflow-scroll no-scrollbar px-1 w-full ${isLoggedIn ? "mt-20" : "mt-0"
+                        }`}
                     >
                       <ErrorBoundary FallbackComponent={ErrorFallback}>
                         <Suspense fallback={<LoadingSpinner />}>

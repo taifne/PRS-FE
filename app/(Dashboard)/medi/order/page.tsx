@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { MdDetails, MdOutlineCreateNewFolder } from "react-icons/md";
-
 import { getCookie } from "cookies-next";
 import {
   Search,
@@ -79,7 +78,7 @@ const OrdersPage: React.FC = () => {
           .includes(searchTerm.toLowerCase());
         const inDateRange = dateRange
           ? dayjs(o.createAt).isAfter(dayjs(dateRange.start)) &&
-            dayjs(o.createAt).isBefore(dayjs(dateRange.end))
+          dayjs(o.createAt).isBefore(dayjs(dateRange.end))
           : true;
         return matchesSearch && inDateRange;
       }) || []
@@ -233,9 +232,8 @@ const OrdersPage: React.FC = () => {
     })) || [];
   return (
     <div
-      className={`max-w-8xl mx-auto p-6 space-y-6 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white"
-      }`}
+      className={`max-w-8xl mx-auto p-6 space-y-6 ${darkMode ? "bg-gray-900 text-white" : "bg-white"
+        }`}
     >
       <Loading
         isLoading={isLoading}
@@ -292,11 +290,11 @@ const OrdersPage: React.FC = () => {
               onChange={setOrderStatus}
               options={options}
               placeholder="Status"
-              //error={error}
+            //error={error}
             />
           </div>
           <button
-            onClick={() => {}}
+            onClick={() => { }}
             className="bg-indigo-600  w-12 h-12 flex items-center justify-center text-white px-2 py-2 rounded hover:bg-indigo-500"
           >
             <Search />
@@ -343,13 +341,12 @@ const OrdersPage: React.FC = () => {
                   Order: {focusedRowData.orderKey ?? "N/A"}
                 </h2>
                 <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    focusedRowData.status === "Pending"
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${focusedRowData.status === "Pending"
                       ? "bg-yellow-100 text-yellow-800"
                       : focusedRowData.status === "Completed"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
                 >
                   {focusedRowData.status ?? "Unknown"}
                 </span>
@@ -596,7 +593,7 @@ const OrdersPage: React.FC = () => {
           </div>
         </div>
       </Popup>
-      
+
       {showToast && (
         <Toast
           message={message}
