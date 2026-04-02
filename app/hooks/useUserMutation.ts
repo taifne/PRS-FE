@@ -3,7 +3,7 @@ import { User, CreateUserDto, UpdateUserDto, UpdateUserRoleDto } from '../type/u
 import { Paginated } from '../type/pagination';
 import { SearchUserRequest } from '../type/user.type';
 import { buildParams } from '../utils/buildParams';
-import axiosClient from '../lib/axios';
+import { axiosClient } from '../lib/axios/axios-client';
 
 const USER_API = '/administration/users';
 
@@ -16,7 +16,7 @@ export const useLazyUsers = (filters: SearchUserRequest) => {
       const res = await axiosClient.get<Paginated<User>>(
         `${USER_API}/search?${queryString}`
       );
-      return res.data;
+      return res;
     },
     enabled: false,
   });

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Role, CreateRoleDto } from '../type/user-role.type';
-import axiosClient from '../lib/axios';
+import { axiosClient } from '../lib/axios/axios-client';
 
 export const useAllRoles = () => {
   return useQuery<Role[]>({

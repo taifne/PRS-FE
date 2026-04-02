@@ -34,14 +34,14 @@ import { getCookie, deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation';
 
-
 import {
   useOpenModalStore,
   useThemeStore,
   useUserRoleStore,
 } from "./stores/layoutStore";
-import { initAuth } from "./lib/initAuth";
 import { useAuth } from "./hooks/useAuth";
+import { AuthProvider } from "./providers/AuthProvider"; // Add this import
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -55,6 +55,7 @@ const geistMono = localFont({
   weight: "100 900",
   display: "swap",
 });
+
 const generateBreadcrumbItems = (path: string): BreadcrumbItem[] => {
   const segments = path.split("/").filter(Boolean);
   let fullPath = "";
@@ -99,61 +100,93 @@ const commonUserItems: SidebarItem[] = [
   },
   { label: "Tab", icon: <PiTabsDuotone />, link: "/docs/tabs" },
 ];
+
 const adminItems: SidebarItem[] = [
   { label: "Users", icon: <SlDrawer />, link: "/admin/users" },
   { label: "Orders", icon: <MdInsertEmoticon />, link: "/admin/orders" },
 ];
+
 const staffItems: SidebarItem[] = [
   { label: "Medicines", icon: <SlDrawer />, link: "/medicines" },
   { label: "Supliers", icon: <MdInsertEmoticon />, link: "/supliers" },
 ];
-
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [showLogoutMessage, setShowLogoutMessage] = useState(false);
   const [queryClient] = useState(() => new QueryClient());
   const { refetchCookies, setRefetchCookies } = useOpenModalStore();
   const { theme, toggleTheme } = useThemeStore();
   const { role, setRole } = useUserRoleStore();
-  // Get a cookie
   const [isHydrated, setIsHydrated] = useState(false);
-  const { isLoggedIn } = useAuth();
+  const { isAuthenticated } = useAuth(); // Change from isLoggedIn to isAuthenticated
+  const currentPage = usePathname();
+  const { push } = useRouter();
+  const { logout } = useAuth(); // Add this with your other hooks
 
   useEffect(() => {
     setIsHydrated(true);
-    //  initAuth();
   }, []);
-  const currentPage = usePathname();
-  const breadcrumbItems = [{ label: "Home", link: "/" }, ...generateBreadcrumbItems(currentPage)];
-  const { push } = useRouter();
+
   useEffect(() => {
     const userRoleCookie = getCookie("userRole")?.toString();
 
-    const userRole =
-      userRoleCookie === "admin"
-        ? "admin"
-        : userRoleCookie === "staff"
-          ? "staff"
-          : "common";
+    // Parse role from cookie with proper typing
+    let userRole: "admin" | "staff" | "common" = "common";
+
+    if (userRoleCookie) {
+      try {
+
+        const parsed = JSON.parse(userRoleCookie);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          userRole = "admin";
+        } else if (typeof parsed === 'string') {
+          // Check if the string is a valid UserRole
+          if (parsed === "admin" || parsed === "staff" || parsed === "common") {
+            userRole = parsed;
+          }
+        }
+      } catch {
+        // If not JSON, treat as string and validate
+        if (userRoleCookie === "admin" || userRoleCookie === "staff" || userRoleCookie === "common") {
+          userRole = userRoleCookie as "admin" | "staff" | "common";
+        }
+      }
+    }
 
     setRole(userRole);
-  }, []);
+  }, [setRole]);
+
+  const breadcrumbItems = [{ label: "Home", link: "/" }, ...generateBreadcrumbItems(currentPage)];
 
   const sideBarItems = useMemo(() => {
     switch (role) {
       case "admin":
-        return adminItems; // Corrected: Should return admin-specific items
+        return adminItems;
       case "staff":
-        return staffItems; // Corrected: Should return staff-specific items
+        return staffItems;
       case "common":
       default:
-        return commonUserItems; // Common user fallback
+        return commonUserItems;
     }
   }, [role]);
-  if (!isHydrated)
+
+  const handleLogout = async () => {
+    await logout();
+    setShowLogoutMessage(true);
+    setRefetchCookies((prev) => prev + 1);
+    push("/login");
+
+    // Hide message after 3 seconds
+    setTimeout(() => {
+      setShowLogoutMessage(false);
+    }, 3000);
+  };
+
+  if (!isHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
@@ -164,6 +197,8 @@ export default function RootLayout({
         </div>
       </div>
     );
+  }
+
   return (
     <html lang="en">
       <head>
@@ -173,85 +208,90 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-900`}
       >
-
         <ThemeProvider attribute="class" defaultTheme="light">
           <QueryClientProvider client={queryClient}>
-            <div className="flex min-h-screen overflow-hidden fixed h-screen w-full">
-              {isLoggedIn ? (
-                <>
-                  {/* Sidebar */}
-                  <Sidebar
-                    items={sideBarItems}
-                    showLogo={true}
-                    theme={theme}
-                    expandedWidth="280px"
-                    collapsedWidth="50px"
-                    enableTouchGestures
-                    customSubMenuIcon={<UserIcon />}
-                  />
-                  {/* Main Content */}
-                  <div className="flex flex-col flex-grow h-full overflow-auto w-full">
-                    <header className="mx-auto overflow-scroll no-scrollbar  w-full  sticky top-0 z-50">
-                      <Navbar
-                        theme={theme}
-                        searchPlaceholder="Search..."
-                        notificationCount={3}
-                        onThemeChange={(isdark: boolean) => toggleTheme()}
-                        userMenuItems={[
-                          {
-                            label: "Profile",
-                            action: () => console.log("Profile clicked"),
-                          },
-                          {
-                            label: "Settings",
-                            action: () => console.log("Settings clicked"),
-                          },
-                          {
-                            label: "Logout",
-                            action: () => {
-                              deleteCookie("token");
-                              deleteCookie("userRole");
-                              setRefetchCookies((prev) => prev + 1);
-                              push("/login");
+            <AuthProvider> {/* Wrap everything with AuthProvider */}
+              <div className="flex min-h-screen overflow-hidden fixed h-screen w-full">
+                {isAuthenticated ? (
+                  <>
+                    {/* Sidebar */}
+                    <Sidebar
+                      items={sideBarItems}
+                      showLogo={true}
+                      theme={theme}
+                      expandedWidth="280px"
+                      collapsedWidth="50px"
+                      enableTouchGestures
+                      customSubMenuIcon={<UserIcon />}
+                    />
+                    {/* Main Content */}
+                    <div className="flex flex-col flex-grow h-full overflow-auto w-full">
+                      <header className="mx-auto overflow-scroll no-scrollbar w-full sticky top-0 z-50">
+                        <Navbar
+                          theme={theme}
+                          searchPlaceholder="Search..."
+                          notificationCount={3}
+                          onThemeChange={(isdark: boolean) => toggleTheme()}
+                          // In your layout.tsx, update userMenuItems or add test links
+                          userMenuItems={[
+                            {
+                              label: "Profile",
+                              action: () => console.log("Profile clicked"),
                             },
-                          },
-                        ]}
+                            {
+                              label: "Auth Test",
+                              action: () => push("/auth-test"),
+                            },
+                            {
+                              label: "Token Test",
+                              action: () => push("/token-refresh-test"),
+                            },
+                            {
+                              label: "Settings",
+                              action: () => console.log("Settings clicked"),
+                            },
+                            {
+                              label: "Logout",
+                              action: handleLogout,
+                            },
+                          ]}
+                        >
+                          <Breadcrumb
+                            items={breadcrumbItems}
+                            separator=">"
+                            linkClass="text-blue-600 hover:text-blue-800"
+                            activeClass="text-gray-800 font-semibold"
+                            separatorClass="mx-2 text-gray-500"
+                          />
+                        </Navbar>
+                      </header>
+                      <main className="mx-auto overflow-scroll no-scrollbar w-full mt-[63px]">
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                          <Suspense fallback={<LoadingSpinner />}>
+                            {children}
+                          </Suspense>
+                        </ErrorBoundary>
+                      </main>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col flex-grow h-full overflow-auto w-full">
+                      <main
+                        className={`mx-auto overflow-scroll no-scrollbar px-1 w-full ${isAuthenticated ? "mt-20" : "mt-0"
+                          }`}
                       >
-                        <Breadcrumb
-                          items={breadcrumbItems}
-                          separator=">"
-                          linkClass="text-blue-600 hover:text-blue-800"
-                          activeClass="text-gray-800 font-semibold"
-                          separatorClass="mx-2 text-gray-500"
-                        />
-                      </Navbar>
-                    </header>
-                    <main className="mx-auto overflow-scroll no-scrollbar   w-full mt-[63px]">
-                      <ErrorBoundary FallbackComponent={ErrorFallback}>
-                        <Suspense fallback={<LoadingSpinner />}>
-                          {children}
-                        </Suspense>
-                      </ErrorBoundary>
-                    </main>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex flex-col flex-grow h-full overflow-auto w-full">
-                    <main
-                      className={`mx-auto overflow-scroll no-scrollbar px-1 w-full ${isLoggedIn ? "mt-20" : "mt-0"
-                        }`}
-                    >
-                      <ErrorBoundary FallbackComponent={ErrorFallback}>
-                        <Suspense fallback={<LoadingSpinner />}>
-                          {children}
-                        </Suspense>
-                      </ErrorBoundary>
-                    </main>
-                  </div>
-                </>
-              )}
-            </div>
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                          <Suspense fallback={<LoadingSpinner />}>
+                            {children}
+                          </Suspense>
+                        </ErrorBoundary>
+                      </main>
+                    </div>
+                  </>
+                )}
+              </div>
+            </AuthProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </body>
